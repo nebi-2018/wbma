@@ -3,16 +3,12 @@ import React, { useContext } from "react";
 import { FlatList } from "react-native";
 import ListItem from "./ListItem";
 import { MediaContext } from "../contexts/MediaContext";
-import { useFetch } from "../hooks/APIHooks";
+import { getAllMedia } from "../hooks/APIHooks";
 
 const List = () => {
   const [media, setMedia] = useContext(MediaContext);
-  const [data, loading] = useFetch(
-    "https://raw.githubusercontent.com/mattpe/wbma/master/docs/assets/test.json"
-  );
-  console.log(data);
+  const [data] = getAllMedia();
   setMedia(data);
-
   return (
     <FlatList
       data={media}
