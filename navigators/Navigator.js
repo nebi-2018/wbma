@@ -1,9 +1,12 @@
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
+import { createSwitchNavigator } from "react-navigation";
 import Home from "../views/Home";
 import Profile from "../views/Profile";
 import Single from "../views/Single";
+import AuthLoading from "../views/AuthLoading";
+import Login from "../views/Login";
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -25,18 +28,29 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 
-const Navigator = createStackNavigator(
-  // RouteConfigs
-  {
-    Home: {
-      screen: TabNavigator,
-      navigationOptions: {
-        headerMode: "none" // this will hide the header
-      }
-    },
-    Single: {
-      screen: Single
+const StackNavigator = createStackNavigator({
+  Home: {
+    screen: TabNavigator,
+    navigationOptions: {
+      headerMode: "none" // this will hide the header
     }
+  },
+  Single: {
+    screen: Single
+  },
+  Logout: {
+    screen: Login
+  }
+});
+
+const Navigator = createSwitchNavigator(
+  {
+    AuthLoading: AuthLoading,
+    App: StackNavigator,
+    Auth: Login
+  },
+  {
+    initialRouteName: "AuthLoading"
   }
 );
 
