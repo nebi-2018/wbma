@@ -3,10 +3,15 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import PropTypes from "prop-types";
 
 const mediaURL = "http://media.mw.metropolia.fi/wbma/uploads/";
+
 const ListItem = props => {
-  console.log("list item props", props.singleMedia);
   return (
-    <TouchableOpacity style={styles.row}>
+    <TouchableOpacity
+      style={styles.row}
+      onPress={() => {
+        props.navigation.push("Single", { file: props.singleMedia });
+      }}
+    >
       <View style={styles.imagebox}>
         <Image
           style={styles.image}
@@ -34,12 +39,10 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: "100%",
-    height: 150,
     borderRadius: 16
   },
   textbox: {
-    flex: 1,
+    flex: 2,
     padding: 10
   },
   listTitle: {
