@@ -2,14 +2,17 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import List from "../components/List";
 import PropTypes from "prop-types";
+import { Container, Content } from "native-base";
 
 const Home = props => {
-  console.log("Home", props);
+  // console.log('Home', props);
   const { navigation } = props;
   return (
-    <View style={styles.container}>
-      <List navigation={navigation}></List>
-    </View>
+    <Container>
+      <View style={styles.container}>
+        <List navigation={navigation}></List>
+      </View>
+    </Container>
   );
 };
 

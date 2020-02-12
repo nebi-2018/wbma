@@ -1,12 +1,6 @@
 import React, { useEffect } from "react";
-
-import {
-  ActivityIndicator,
-  AsyncStorage,
-  StatusBar,
-  View,
-  Text
-} from "react-native";
+import { ActivityIndicator, AsyncStorage, StatusBar, View } from "react-native";
+import PropTypes from "prop-types";
 
 const bootstrapAsync = async props => {
   const getToken = async () => {
@@ -30,6 +24,10 @@ const AuthLoading = props => {
       <StatusBar barStyle="default" />
     </View>
   );
+};
+
+AuthLoading.propTypes = {
+  navigation: PropTypes.object
 };
 
 export default AuthLoading;

@@ -23,7 +23,7 @@ const useSignUpForm = () => {
   const handleFullnameChange = text => {
     setInputs(inputs => ({
       ...inputs,
-      fullname: text
+      full_name: text
     }));
   };
 

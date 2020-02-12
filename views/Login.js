@@ -1,19 +1,11 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Button,
-  AsyncStorage,
-  InputAccessoryView
-} from "react-native";
+import { StyleSheet, View, Text, Button, AsyncStorage } from "react-native";
 import PropTypes from "prop-types";
-import { login, register } from "../hooks/APIHooks";
+import { fetchPOST } from "../hooks/APIHooks";
 import FormTextInput from "../components/FormTextInput";
 import useSignUpForm from "../hooks/LoginHooks";
 
 const Login = props => {
-  // props is needed for navigation
   const [error, setError] = useState("");
   const {
     handleUsernameChange,
@@ -24,58 +16,49 @@ const Login = props => {
   } = useSignUpForm();
   const signInAsync = async () => {
     try {
-      const user = await login(inputs);
+      const user = await fetchPOST("login", inputs);
       console.log("Login", user);
       await AsyncStorage.setItem("userToken", user.token);
       await AsyncStorage.setItem("user", JSON.stringify(user.user));
       props.navigation.navigate("App");
     } catch (e) {
-      console.log(e.message);
+      console.log("signInAsync error: " + e.message);
+      setError(e.message);
     }
   };
-
   const registerAsync = async () => {
     try {
-      const result = await register(inputs);
-      console.log("register", user);
-      if (!result.error) {
-        signInAsync();
-      } else {
-        setError(result.error);
-      }
+      const result = await fetchPOST("users", inputs);
+      console.log("register", result);
+      signInAsync();
     } catch (e) {
-      console.log(e.message);
+      console.log("registerAsync error: ", e.message);
+      setError(e.message);
     }
   };
 
   return (
     <View style={styles.container}>
-      {/*login form*/}
+      {/* login form */}
       <View style={styles.form}>
         <Text>Login</Text>
         <View>
           <FormTextInput
             autoCapitalize="none"
             placeholder="username"
-            value={inputs.username}
             onChangeText={handleUsernameChange}
           />
           <FormTextInput
             autoCapitalize="none"
             placeholder="password"
             secureTextEntry={true}
-            value={inputs.password}
             onChangeText={handlePasswordChange}
           />
-          <Button
-            title="Sign in!"
-            onPress={() => {
-              signInAsync();
-            }}
-          />
+          <Button title="Sign in!" onPress={signInAsync} />
         </View>
       </View>
-      {/*register form*/}
+
+      {/* register form */}
       <View style={styles.form}>
         <Text>Register</Text>
         <View>
@@ -98,15 +81,10 @@ const Login = props => {
             autoCapitalize="none"
             placeholder="password"
             secureTextEntry={true}
-            value={inputs.password}
             onChangeText={handlePasswordChange}
           />
-          <Button
-            title="Sign in!"
-            onPress={() => {
-              registerAsync();
-            }}
-          />
+          <Button title="Register!" onPress={registerAsync} />
+          <Text>{error}</Text>
         </View>
       </View>
     </View>
@@ -120,9 +98,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 40
+  },
+  form: {
+    width: "90%"
   }
 });
 
 // proptypes here
+Login.propTypes = {
+  navigation: PropTypes.object
+};
 
 export default Login;
